@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcular Edad</title>
+</head>
+
+<body>
+    <h1>Calcular la Edad</h1>
+    <form onsubmit="calcularEdad(event)">
+        <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+        <input type="date" name="fecha_nacimiento" required> <br><br>
+        <input type="submit" value="Calcular Edad">
+    </form>
+
+    <br>
+    <div id="resultado"></div> <!-- Aquí se mostrará la edad -->
+
+    <script>
+        function calcularEdad(event) {
+            event.preventDefault(); // Evita que el formulario recargue la página
+            var fecha_nacimiento = document.querySelector('input[name="fecha_nacimiento"]').value;
+
+            // Enviar datos al archivo PHP usando Fetch API
+            fetch('calcular_edad.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'fecha_nacimiento=' + encodeURIComponent(fecha_nacimiento)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('resultado').textContent = "Tienes " + data + " años.";
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+
+</html>
